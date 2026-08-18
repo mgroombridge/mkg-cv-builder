@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#185abd" />
-  <meta name="description" content="MKG CV Builder helps job seekers create, preview and export a polished CV." />
+  <meta name="description" content="MKG CV Builder helps job seekers create, save, preview and export polished CVs." />
   <title>MKG CV Builder</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -17,81 +17,60 @@
         <small>Build a polished CV, step by step</small>
       </div>
     </div>
+
+    <nav class="top-nav" aria-label="Main navigation">
+      <button class="nav-pill active" data-page="builder" type="button">Builder</button>
+      <button class="nav-pill" data-page="dashboard" type="button">Dashboard</button>
+      <button class="nav-pill" data-page="profile" type="button">Profile</button>
+      <button class="nav-pill" data-page="jobs" type="button">Jobs</button>
+      <button class="nav-pill disabled" data-page="cover" type="button" aria-disabled="true">Cover letters</button>
+    </nav>
+
     <div class="header-actions">
       <span id="saveStatus" class="save-status" aria-live="polite">Saved locally</span>
+      <button id="accountBtn" class="btn btn-secondary" type="button">Sign in</button>
       <button id="resetBtn" class="btn btn-ghost" type="button">Start again</button>
     </div>
   </header>
 
-  <main class="app-shell">
-    <aside class="step-nav" aria-label="CV sections">
-      <div class="progress-wrap">
-        <div class="progress-copy"><span>CV progress</span><strong id="progressText">1 of 7</strong></div>
-        <div class="progress-track" aria-hidden="true"><div id="progressBar"></div></div>
-      </div>
-      <nav id="stepList"></nav>
-      <div class="nav-tip">
-        <strong>Tip</strong>
-        <p>Keep your CV clear, relevant and easy to scan. Aim for strong evidence rather than long paragraphs.</p>
-      </div>
-    </aside>
-
-    <section class="workspace">
-      <div class="editor-pane">
-        <div class="editor-toolbar">
-          <div>
-            <span class="eyebrow" id="stepEyebrow">Step 1</span>
-            <h1 id="stepTitle">Personal details</h1>
-            <p id="stepIntro">Start with the essentials employers need to contact you.</p>
-          </div>
-          <button id="mobilePreviewBtn" class="btn btn-secondary mobile-only" type="button">Preview CV</button>
-        </div>
-
-        <form id="cvForm" autocomplete="on">
-          <div id="stepContent"></div>
-        </form>
-
-        <div class="editor-footer">
-          <button id="backBtn" class="btn btn-secondary" type="button">Back</button>
-          <div class="footer-actions">
-            <button id="saveBtn" class="btn btn-ghost" type="button">Save</button>
-            <button id="nextBtn" class="btn btn-primary" type="button">Next</button>
-          </div>
-        </div>
-      </div>
-
-      <aside class="preview-pane" id="previewPane" aria-label="CV preview">
-        <div class="preview-toolbar">
-          <div>
-            <strong>Live preview</strong>
-            <small>Modern · clean · ATS-friendly</small>
-          </div>
-          <button id="closePreviewBtn" class="icon-btn mobile-only" type="button" aria-label="Close preview">×</button>
-        </div>
-        <div class="preview-scroller">
-          <article id="cvPreview" class="cv-page" aria-label="CV document preview"></article>
-        </div>
-        <div class="export-bar">
-          <button id="wordBtn" class="btn btn-secondary" type="button">Export Word</button>
-          <button id="pdfBtn" class="btn btn-primary" type="button">Export PDF</button>
-        </div>
-      </aside>
-    </section>
-  </main>
-
+  <main id="app"></main>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <dialog id="resetDialog" class="confirm-dialog">
-    <form method="dialog">
-      <h2>Start again?</h2>
-      <p>This clears the CV saved on this device. Export anything you want to keep first.</p>
-      <div class="dialog-actions">
-        <button class="btn btn-secondary" value="cancel">Cancel</button>
-        <button id="confirmResetBtn" class="btn btn-danger" value="confirm">Clear CV</button>
+  <dialog id="accountDialog" class="confirm-dialog wide-dialog">
+    <form method="dialog" class="account-form">
+      <h2>Account</h2>
+      <p class="muted">Create an account or sign in to save CVs, profile details and version history.</p>
+      <div class="form-grid">
+        <div class="field">
+          <label for="authEmail">Email</label>
+          <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" />
+        </div>
+        <div class="field">
+          <label for="authPassword">Password</label>
+          <input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters" />
+        </div>
+      </div>
+      <div class="dialog-actions split">
+        <button class="btn btn-secondary" value="cancel">Close</button>
+        <span class="spacer"></span>
+        <button id="signInBtn" class="btn btn-secondary" type="button">Sign in</button>
+        <button id="signUpBtn" class="btn btn-primary" type="button">Create account</button>
       </div>
     </form>
   </dialog>
 
+  <dialog id="confirmDialog" class="confirm-dialog">
+    <form method="dialog">
+      <h2 id="confirmTitle">Confirm</h2>
+      <p id="confirmMessage">Are you sure?</p>
+      <div class="dialog-actions">
+        <button class="btn btn-secondary" value="cancel">Cancel</button>
+        <button id="confirmActionBtn" class="btn btn-danger" value="confirm">Confirm</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>
